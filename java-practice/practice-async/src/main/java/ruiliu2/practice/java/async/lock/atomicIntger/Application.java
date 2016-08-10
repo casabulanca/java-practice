@@ -1,4 +1,4 @@
-package ruiliu2.practice.java.async.lock.atomicInter;
+package ruiliu2.practice.java.async.lock.atomicIntger;
 
 /**
  * atomicIntger
