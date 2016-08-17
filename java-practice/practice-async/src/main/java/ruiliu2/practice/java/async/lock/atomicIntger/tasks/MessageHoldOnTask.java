@@ -3,13 +3,13 @@ package ruiliu2.practice.java.async.lock.atomicIntger.tasks;
 import redis.clients.jedis.JedisPubSub;
 
 /**
- * redis message receiver
- * Created by ruiliu2@iflytek.com on 2016/8/11.
+ * 消息僵持者
+ * Created by ruiliu2@iflytek.com on 16/8/17.
  */
-public class RedisMessageReceiver extends JedisPubSub {
+public class MessageHoldOnTask extends JedisPubSub {
 
     public void onMessage(String s, String s1) {
-
+        // TODO: 16/8/17 开启一个线程进行睡眠
     }
 
     public void onPMessage(String s, String s1, String s2) {
