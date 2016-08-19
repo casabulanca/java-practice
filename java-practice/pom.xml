@@ -9,6 +9,16 @@
         <module>practice-async</module>
     </modules>
 
+    <properties>
+        <springfox.version>2.3.1</springfox.version>
+        <akka.version>2.4.1</akka.version>
+        <shiro.version>1.2.4</shiro.version>
+        <mybatis.version>3.3.1</mybatis.version>
+        <mybatis.spring.version>1.2.4</mybatis.spring.version>
+        <pagehelper.version>4.1.1</pagehelper.version>
+        <mapper.version>3.3.6</mapper.version>
+    </properties>
+
     <groupId>ruiliu2.practice.java</groupId>
     <artifactId>practice-java</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -22,11 +32,24 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!--spring fox-->
             <dependency>
-                <groupId>redis.clients</groupId>
-                <artifactId>jedis</artifactId>
-                <version>2.1.0</version>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${springfox.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${springfox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-petstore</artifactId>
+                <version>${springfox.version}</version>
+            </dependency>
+            <!--spring fox-->
         </dependencies>
     </dependencyManagement>
 
