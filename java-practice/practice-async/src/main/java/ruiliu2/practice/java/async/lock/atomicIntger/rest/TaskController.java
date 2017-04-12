@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ruiliu2.practice.java.async.lock.atomicIntger.service.TaskService;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * 任务控制控制器
- * Created by ruiliu2@iflytek.com on 16/8/19.
+ * Created by ruiliu2@.com on 16/8/19.
  */
 @Controller
 @RequestMapping(value = "/api/taskSchedule/")
@@ -27,8 +29,8 @@ public class TaskController {
     @ResponseBody
     public boolean startTask(@PathVariable(value = "id") String id,
                              @PathVariable(value = "value") String value,
-                             @PathVariable(value = "duration") String duration) {
-        return !taskService.addTask(id, value, duration).equals("");
+                             @PathVariable(value = "duration") String duration) throws ExecutionException, InterruptedException {
+        return !(taskService.addTask(id, value, duration).equals(""));
     }
 
     @RequestMapping(value = "value/{id}", method = RequestMethod.GET)

@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 锁池
- * Created by ruiliu2@iflytek.com on 16/8/11.
+ * Created by ruiliu2@.com on 16/8/11.
  */
 @Component
 public class LockPool {

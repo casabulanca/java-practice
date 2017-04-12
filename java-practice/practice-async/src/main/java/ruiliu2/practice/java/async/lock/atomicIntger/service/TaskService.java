@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * 任务调度服务
- * Created by ruiliu2@iflytek.com on 16/8/19.
+ * Created by ruiliu2@.com on 16/8/19.
  */
 @Service
 public class TaskService {
@@ -24,5 +24,6 @@ public class TaskService {
         System.out.println(String.format("Caching value: %s, duration: %s", value, duration));
         Thread.sleep(1000 * Long.valueOf(duration));
         return value;
+
     }
 }

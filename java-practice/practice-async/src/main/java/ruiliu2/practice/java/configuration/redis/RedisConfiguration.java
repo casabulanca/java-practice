@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * redis configuration
- * Created by ruiliu2@iflytek.com on 16/1/18.
+ * Created by ruiliu2@.com on 16/1/18.
  */
 @Configuration
 public class RedisConfiguration {

@@ -7,6 +7,10 @@
     <packaging>pom</packaging>
     <modules>
         <module>practice-async</module>
+        <module>../esrally-datasource-generator</module>
+        <module>../ElasticsearchTransportClient</module>
+        <module>../Test-Server</module>
+        <module>../java-spring-annotations</module>
     </modules>
 
     <properties>
@@ -50,6 +54,14 @@
                 <version>${springfox.version}</version>
             </dependency>
             <!--spring fox-->
+
+            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.4</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
