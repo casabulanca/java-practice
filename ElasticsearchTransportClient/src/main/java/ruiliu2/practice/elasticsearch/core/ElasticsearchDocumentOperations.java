@@ -9,7 +9,7 @@ import java.util.List;
  * Elasticsearch操作接口约定
  * Created by ruiliu2 on 2017/3/30.
  */
-public interface ElasticsearchOperations<T> {
+public interface ElasticsearchDocumentOperations<T> {
 
     T create(T instance);
 

@@ -28,7 +28,7 @@ import java.util.Objects;
  * 默认ESClient的实现
  * Created by ruiliu2 on 2017/4/1.
  */
-public class DefaultElasticsearchRepo<T> implements ElasticsearchOperations<T> {
+public class DefaultElasticsearchRepo<T> implements ElasticsearchDocumentOperations<T> {
 
     /**
      * ES Client
