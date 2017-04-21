@@ -26,16 +26,12 @@ public class ESDemoService {
         return defaultElasticsearchRepo.matchQueryPageData(searchBody);
     }
 
-    public List<TransEntity> entities(String searchText) {
-        return null;
+    public String update(TransEntity entity) {
+        return defaultElasticsearchRepo.update(entity);
     }
 
-    public boolean update(TransEntity entity) {
-        return false;
-    }
-
-    public boolean delete(String id) {
-        return false;
+    public String delete(String id) {
+        return defaultElasticsearchRepo.delete(id);
     }
 
     public TransEntity entity(TransEntity transEntity) {

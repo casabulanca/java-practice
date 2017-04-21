@@ -47,22 +47,6 @@ public class Application {
     public static void main(String... args) throws ExecutionException, InterruptedException {
         DefaultElasticsearchRepo<TestDocument> repo = new DefaultElasticsearchRepo<>(client, TestDocument.class);
         System.out.println(String.format("Main Thread number: %s", Thread.currentThread().getId()));
-
-        TransEntity transEntity = new TransEntity();
-        List<Lattice> lattices = new ArrayList<>();
-        Lattice lattice = new Lattice();
-        lattice.setWs("123");
-        lattice.setOnebestText("你好世界杯");
-        lattice.setBeginTime(10000);
-        lattice.setEndTime(111111);
-        lattice.setMsgType("progressive");
-        lattice.setRole("aaa");
-        lattice.setSequence(1);
-        lattices.add(lattice);
-        transEntity.setLattices(lattices);
-        transEntity.setFullText("你好世界杯");
-        transEntity.setId(UUID.randomUUID().toString());
-        System.out.println(JSON.toJSONString(transEntity));
 //        TestDocument testDocument = new TestDocument();
 //        List<JSONContent> contents = new ArrayList<>();
 //        StringBuilder sb = new StringBuilder();
