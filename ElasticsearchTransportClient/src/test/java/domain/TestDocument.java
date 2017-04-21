@@ -1,17 +1,22 @@
 package domain;
 
-import ruiliu2.practice.elasticsearch.annotations.HiseePSDocument;
-import ruiliu2.practice.elasticsearch.annotations.HiseePSDocumentId;
+import ruiliu2.practice.elasticsearch.annotations.*;
+
+import java.util.List;
 
 /**
  * 测试文档实体对象
  * Created by ruiliu2 on 2017/4/10.
  */
-@HiseePSDocument(indexName = "test_index", typeName = "test_type")
+@HiseePSDocument(indexName = "test_index_code", typeName = "test_type_code")
 public class TestDocument {
 
     @HiseePSDocumentId
+    @HiseePSField(type = HiseePSFieldType.Keyword)
     private String res_id;
+    @HiseePSField(type = HiseePSFieldType.Object)
+    private List<JSONContent> contents;
+    @HiseePSField(type = HiseePSFieldType.Text, index = HiseePSFieldIndex.analyzed, search_analyzer = "ik_max_word", analyzer = "ik_max_word")
     private String content;
 
     /**
@@ -39,6 +44,24 @@ public class TestDocument {
      */
     public String getContent() {
         return content;
+    }
+
+    /**
+     * contents getter
+     *
+     * @return contents
+     */
+    public List<JSONContent> getContents() {
+        return contents;
+    }
+
+    /**
+     * contents setter
+     *
+     * @param contents contents
+     */
+    public void setContents(List<JSONContent> contents) {
+        this.contents = contents;
     }
 
     /**

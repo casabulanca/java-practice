@@ -25,4 +25,8 @@ public @interface HiseePSDocument {
      */
     String typeName() default "";
 
+    int shardsNumber() default 5;
+
+    int replicasNumber() default 1;
+
 }

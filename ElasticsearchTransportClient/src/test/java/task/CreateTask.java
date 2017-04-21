@@ -1,7 +1,7 @@
 package task;
 
 import domain.TestDocument;
-import ruiliu2.practice.elasticsearch.core.ElasticsearchOperations;
+import ruiliu2.practice.elasticsearch.core.ElasticsearchDocumentOperations;
 
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -12,9 +12,9 @@ import java.util.concurrent.Callable;
  */
 public class CreateTask implements Callable<String> {
 
-    private ElasticsearchOperations<TestDocument> elasticsearchRepo;
+    private ElasticsearchDocumentOperations<TestDocument> elasticsearchRepo;
 
-    public CreateTask(ElasticsearchOperations<TestDocument> elasticsearchRepo) {
+    public CreateTask(ElasticsearchDocumentOperations<TestDocument> elasticsearchRepo) {
         this.elasticsearchRepo = elasticsearchRepo;
     }
 

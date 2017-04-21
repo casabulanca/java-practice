@@ -2,6 +2,7 @@ package ruiliu2.practice.elasticsearch.core;
 
 
 import ruiliu2.practice.elasticsearch.core.query.Pagination;
+import ruiliu2.practice.elasticsearch.core.query.SearchBody;
 
 import java.util.List;
 
@@ -17,5 +18,9 @@ public interface ElasticsearchDocumentOperations<T> {
 
     String update(T instance);
 
-    List<T> matchQueryPageData(String fieldName, String searchBody, Pagination pagination);
+    List<T> matchQueryPageData(SearchBody searchBody);
+
+    List<T> all(Pagination pagination);
+
+    T one(String id);
 }

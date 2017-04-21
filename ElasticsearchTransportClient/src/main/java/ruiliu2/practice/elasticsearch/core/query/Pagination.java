@@ -65,10 +65,13 @@ public class Pagination {
         return sorts;
     }
 
+    public Pagination() {
+    }
+
     private Pagination(PaginationBuilder builder) {
         this.pageSize = builder.pageSize;
         this.pageNumber = builder.pageNumber;
-        for (Map.Entry<String, SortOrder> item : builder.sourList.entrySet()) {
+        for (Map.Entry<String, SortOrder> item : builder.sortList.entrySet()) {
             this.sorts.add(new Sort(item.getKey(), item.getValue()));
         }
     }
@@ -80,7 +83,7 @@ public class Pagination {
          */
         private int pageSize = 0;
         private int pageNumber = -1;
-        private Map<String, SortOrder> sourList = new HashMap<>();
+        private Map<String, SortOrder> sortList = new HashMap<>();
 
         public PaginationBuilder pageSize(int pageSize) {
             this.pageSize = pageSize;
@@ -93,7 +96,7 @@ public class Pagination {
         }
 
         public PaginationBuilder sort(String field, SortOrder order) {
-            this.sourList.put(field, order);
+            this.sortList.put(field, order);
             return this;
         }
 
