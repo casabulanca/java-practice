@@ -50,6 +50,30 @@ public class Lattice {
     private long sequence;
 
     /**
+     * 是否分段
+     */
+    @HiseePSField(type = HiseePSFieldType.Boolean, index = HiseePSFieldIndex.no)
+    private boolean separate;
+
+    /**
+     * separate getter
+     *
+     * @return separate
+     */
+    public boolean getSeparate() {
+        return separate;
+    }
+
+    /**
+     * separate setter
+     *
+     * @param separate separate
+     */
+    public void setSeparate(boolean separate) {
+        this.separate = separate;
+    }
+
+    /**
      * beginTime getter
      *
      * @return beginTime
@@ -157,6 +181,7 @@ public class Lattice {
         this.onebestText = onebestText;
     }
 
+
     /**
      * sequence getter
      *
@@ -174,4 +199,6 @@ public class Lattice {
     public void setSequence(long sequence) {
         this.sequence = sequence;
     }
+
+
 }

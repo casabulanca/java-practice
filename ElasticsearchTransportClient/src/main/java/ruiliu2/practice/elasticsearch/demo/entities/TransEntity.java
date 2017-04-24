@@ -18,9 +18,6 @@ public class TransEntity {
     @HiseePSField(type = HiseePSFieldType.Object)
     private List<Lattice> lattices;
 
-    @HiseePSField(type = HiseePSFieldType.Text)
-    private String fullText;
-
     /**
      * id getter
      *
@@ -57,21 +54,4 @@ public class TransEntity {
         this.lattices = lattices;
     }
 
-    /**
-     * fullText getter
-     *
-     * @return fullText
-     */
-    public String getFullText() {
-        return fullText;
-    }
-
-    /**
-     * fullText setter
-     *
-     * @param fullText fullText
-     */
-    public void setFullText(String fullText) {
-        this.fullText = fullText;
-    }
 }
