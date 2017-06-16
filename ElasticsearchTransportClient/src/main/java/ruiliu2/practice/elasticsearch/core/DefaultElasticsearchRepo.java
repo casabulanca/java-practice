@@ -3,9 +3,11 @@ package ruiliu2.practice.elasticsearch.core;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.action.support.WriteRequest;
 import org.elasticsearch.action.update.UpdateRequestBuilder;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.Strings;
@@ -21,6 +23,7 @@ import ruiliu2.practice.elasticsearch.annotations.*;
 import ruiliu2.practice.elasticsearch.core.query.Pagination;
 import ruiliu2.practice.elasticsearch.core.query.QueryItem;
 import ruiliu2.practice.elasticsearch.core.query.SearchBody;
+import ruiliu2.practice.elasticsearch.demo.entities.Lattice;
 
 import static org.elasticsearch.common.xcontent.XContentFactory.*;
 
@@ -62,12 +65,16 @@ public class DefaultElasticsearchRepo<T> implements ElasticsearchDocumentOperati
     public T create(T instance) {
         String documentId;
         XContentDecorator xContentDecorator = new XContentDecorator();
-        buildContent(xContentDecorator, instance);
+        buildContent(xContentDecorator, instance, AnalysisType.INIT);
         String docId = xContentDecorator.getDocumentId();
+//        IndexRequestBuilder builder = transportClient.prepareIndex(eSindex.getIndexName(), eSindex.getTypeName()).
+//                setSource(xContentDecorator.getxContentBuilder()).setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
         IndexRequestBuilder builder = transportClient.prepareIndex(eSindex.getIndexName(), eSindex.getTypeName()).
-                setSource(xContentDecorator.getxContentBuilder());
-        documentId = StringUtils.isEmpty(docId) ? builder.get().getId() : builder.setId(docId).get().getId();
-        return StringUtils.isEmpty(documentId) || !docId.equals(documentId) ? null : instance;
+                setSource(JSON.toJSONString(instance)).setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
+        builder.get();
+//        documentId = StringUtils.isEmpty(docId) ? builder.get().getId() : builder.setId(docId).get().getId();
+//        return StringUtils.isEmpty(documentId) || !docId.equals(documentId) ? null : instance;
+        return instance;
     }
 
     /**
@@ -76,16 +83,25 @@ public class DefaultElasticsearchRepo<T> implements ElasticsearchDocumentOperati
      * @param instance 实体对象
      * @return XContent
      */
-    private void buildContent(XContentDecorator xContentDecorator, Object instance) {
+    private void buildContent(XContentDecorator xContentDecorator, Object instance, AnalysisType type) {
         try {
             String docId = "";
             Class<?> clazz = instance.getClass();
             XContentBuilder xContentBuilder;
-            if (Objects.isNull(xContentDecorator.getxContentBuilder())) {
-                xContentBuilder = jsonBuilder().startObject();
-                xContentDecorator.setxContentBuilder(xContentBuilder);
-            } else {
-                xContentBuilder = xContentDecorator.getxContentBuilder().startObject();
+            switch (type) {
+                case COLLECTION:
+                    xContentBuilder = xContentDecorator.getxContentBuilder().startObject();
+                    break;
+                case INIT:
+                    xContentBuilder = jsonBuilder().startObject();
+                    xContentDecorator.setxContentBuilder(xContentBuilder);
+                    break;
+                case OBJECT:
+                    xContentBuilder = xContentDecorator.getxContentBuilder();
+                    break;
+                default:
+                    xContentBuilder = xContentDecorator.getxContentBuilder();
+                    break;
             }
             for (Field field : clazz.getDeclaredFields()) {
                 field.setAccessible(true);
@@ -95,24 +111,50 @@ public class DefaultElasticsearchRepo<T> implements ElasticsearchDocumentOperati
                     docId = fieldValue.toString();
                 }
                 //如果是列表
-                if (Collection.class.isAssignableFrom(field.getType())) {
-                    xContentBuilder.startArray(fieldName);
-                    ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-                    JSONArray.parseArray(JSON.toJSONString(fieldValue), (Class<?>) parameterizedType.getActualTypeArguments()[0]).forEach((item) -> {
-                        buildContent(xContentDecorator, item);
-                    });
-                    xContentBuilder.endArray();
-                }
-                //如果是数组
-                else if (field.getType().isArray()) {
-                    xContentBuilder.startArray(fieldName);
 
-                    JSONArray.parseArray(JSON.toJSONString(fieldValue), field.getType().getComponentType()).forEach((item) -> {
-                        buildContent(xContentDecorator, item);
-                    });
-                    xContentBuilder.endArray();
+                if (Collection.class.isAssignableFrom(field.getType()) || field.getType().isArray() || Map.class.isAssignableFrom(field.getType())) {
+                    Class<?> concreteClazz = null;
+                    if (Collection.class.isAssignableFrom(field.getType())) {
+                        ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+                        concreteClazz = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+                    }
+                    //如果是数组
+                    else if (field.getType().isArray()) {
+                        concreteClazz = field.getType().getComponentType();
+                    } else {
+
+                        xContentBuilder.field(fieldName, fieldValue);
+                        break;
+                        //获取value的类型
+                    }
+                    if (concreteClazz != null && concreteClazz.isAnnotationPresent(HiseeInnerClass.class)) {
+                        xContentBuilder.startArray(fieldName);
+                        if (!Objects.isNull(fieldValue)) {
+                            JSONArray.parseArray(JSON.toJSONString(fieldValue), concreteClazz).forEach((item) -> {
+                                buildContent(xContentDecorator, item, AnalysisType.COLLECTION);
+                            });
+                        }
+                        xContentBuilder.endArray();
+                    } else {
+                        xContentBuilder.startArray(fieldName);
+                        if (!Objects.isNull(fieldValue)) {
+                            JSONArray.parseArray(JSON.toJSONString(fieldValue), concreteClazz).forEach((item) -> {
+                                try {
+                                    xContentBuilder.value(item);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                        }
+                        xContentBuilder.endArray();
+                    }
                 } else {
-                    xContentBuilder.field(fieldName, fieldValue);
+                    if (field.getType().isAnnotationPresent(HiseeObjectClass.class)) {
+                        xContentBuilder.startObject(fieldName);
+                        buildContent(xContentDecorator, fieldValue, AnalysisType.OBJECT);
+                    } else {
+                        xContentBuilder.field(fieldName, fieldValue);
+                    }
                 }
             }
             xContentBuilder.endObject();
@@ -144,7 +186,7 @@ public class DefaultElasticsearchRepo<T> implements ElasticsearchDocumentOperati
     @Override
     public String update(T instance) {
         XContentDecorator decorator = new XContentDecorator();
-        buildContent(decorator, instance);
+        buildContent(decorator, instance, AnalysisType.INIT);
         Assert.hasText(decorator.getDocumentId(), "update document without documentId");
         UpdateRequestBuilder builder = transportClient.prepareUpdate(eSindex.getIndexName(), eSindex.getTypeName(), decorator.getDocumentId())
                 .setDoc(decorator.getxContentBuilder());
@@ -223,7 +265,8 @@ public class DefaultElasticsearchRepo<T> implements ElasticsearchDocumentOperati
         QueryBuilder queryBuilder = QueryBuilders.matchQuery("_id", id);
         SearchRequestBuilder requestBuilder = transportClient.prepareSearch(eSindex.getIndexName()).setTypes(eSindex.getTypeName());
         requestBuilder.setQuery(queryBuilder);
-        return resultMapper(requestBuilder.get().getHits().hits()).get(0);
+        List<T> result = resultMapper(requestBuilder.get().getHits().hits());
+        return result.size() > 0 ? result.get(0) : null;
     }
 
     /**
@@ -305,7 +348,6 @@ public class DefaultElasticsearchRepo<T> implements ElasticsearchDocumentOperati
     private void concreteMapping(XContentBuilder xContentBuilder, Field field) {
         //首先判断type
         //如果type为复杂的类型例如object以及nested还需要反射其复杂对象
-
         HiseePSField hiseePSField = field.getAnnotation(HiseePSField.class);
         try {
             if (hiseePSField.type() == HiseePSFieldType.Object || hiseePSField.type() == HiseePSFieldType.Nested) {
@@ -318,10 +360,18 @@ public class DefaultElasticsearchRepo<T> implements ElasticsearchDocumentOperati
                 //如果是列表
                 if (Collection.class.isAssignableFrom(field.getType())) {
                     ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-                    mappings(xContentBuilder, (Class<?>) parameterizedType.getActualTypeArguments()[0]);
+                    Class clazz = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+                    if (!clazz.isAnnotationPresent(HiseeInnerClass.class)) {
+                        return;
+                    }
+                    mappings(xContentBuilder, clazz);
                 }
                 //如果是数组
                 else if (field.getType().isArray()) {
+                    Class clazz = field.getType().getComponentType();
+                    if (!clazz.isAnnotationPresent(HiseeInnerClass.class)) {
+                        return;
+                    }
                     mappings(xContentBuilder, field.getType().getComponentType());
                 }
             } else {
@@ -363,6 +413,11 @@ public class DefaultElasticsearchRepo<T> implements ElasticsearchDocumentOperati
         }
     }
 
+    private enum AnalysisType {
+        INIT,
+        COLLECTION,
+        OBJECT;
+    }
 
     /**
      * inner class esindex 用于描述数据index信息

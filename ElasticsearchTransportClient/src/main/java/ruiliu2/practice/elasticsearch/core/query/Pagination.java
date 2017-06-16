@@ -18,7 +18,7 @@ public class Pagination {
      */
     private int pageSize;
     private int pageNumber;
-    private List<Sort> sorts = new ArrayList<>();
+    private List<Sort> sorts = new ArrayList<Sort>();
 
     /**
      * pageSieze getter

@@ -1,6 +1,7 @@
 package ruiliu2.practice.elasticsearch.core;
 
 
+
 import ruiliu2.practice.elasticsearch.core.query.Pagination;
 import ruiliu2.practice.elasticsearch.core.query.SearchBody;
 

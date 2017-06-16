@@ -1,12 +1,17 @@
 package ruiliu2.practice.elasticsearch.demo.entities;
 
+
 import ruiliu2.practice.elasticsearch.annotations.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 翻译文本
  * Created by ruiliu2 on 2017/4/24.
  */
-@HiseePSDocument(indexName = "hiseeps-edit", typeName = "hiseeps-edit", shardsNumber = 3, replicasNumber = 1)
+@HiseePSDocument(indexName = "hiseeps-ed", typeName = "hiseeps-ed", shardsNumber = 3, replicasNumber = 1)
+@HiseeObjectClass
 public class TransText {
 
     @HiseePSDocumentId
@@ -16,8 +21,12 @@ public class TransText {
     @HiseePSField(type = HiseePSFieldType.Text, index = HiseePSFieldIndex.analyzed, analyzer = "ik_max_word", search_analyzer = "ik_max_word")
     private String fullText;
 
-    @HiseePSField(type = HiseePSFieldType.Keyword, index = HiseePSFieldIndex.not_analyzed)
+    @HiseePSField(type = HiseePSFieldType.Text, index = HiseePSFieldIndex.no)
     private String html;
+
+    @HiseePSField(type = HiseePSFieldType.Object)
+    private Map<String, List<Lattice>> lattices;
+
 
     /**
      * id getter
@@ -26,6 +35,7 @@ public class TransText {
      */
     public String getId() {
         return id;
+
     }
 
     /**
@@ -71,5 +81,23 @@ public class TransText {
      */
     public void setHtml(String html) {
         this.html = html;
+    }
+
+    /**
+     * lattices getter
+     *
+     * @return lattices
+     */
+    public Map<String, List<Lattice>> getLattices() {
+        return lattices;
+    }
+
+    /**
+     * lattices setter
+     *
+     * @param lattices lattices
+     */
+    public void setLattices(Map<String, List<Lattice>> lattices) {
+        this.lattices = lattices;
     }
 }

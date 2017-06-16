@@ -1,8 +1,11 @@
 package ruiliu2.practice.elasticsearch.demo.configuration;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -40,4 +43,5 @@ public class SpringfoxConfig {
                 .paths(Predicates.not(PathSelectors.regex("/dump.*")))
                 .build();
     }
+
 }

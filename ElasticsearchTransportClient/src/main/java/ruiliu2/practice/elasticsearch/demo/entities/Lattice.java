@@ -1,6 +1,8 @@
 package ruiliu2.practice.elasticsearch.demo.entities;
 
 
+import com.alibaba.fastjson.annotation.JSONField;
+import ruiliu2.practice.elasticsearch.annotations.HiseeInnerClass;
 import ruiliu2.practice.elasticsearch.annotations.HiseePSField;
 import ruiliu2.practice.elasticsearch.annotations.HiseePSFieldIndex;
 import ruiliu2.practice.elasticsearch.annotations.HiseePSFieldType;
@@ -10,6 +12,7 @@ import ruiliu2.practice.elasticsearch.annotations.HiseePSFieldType;
  * 转写结果item
  * Created by ruiliu2@iflytek.com on 16/5/1.
  */
+@HiseeInnerClass
 public class Lattice {
 
 
@@ -17,21 +20,25 @@ public class Lattice {
      * 开始时间
      */
     @HiseePSField(type = HiseePSFieldType.Long)
+    @JSONField(name = "bg")
     private long beginTime;
     /**
      * 结束时间
      */
     @HiseePSField(type = HiseePSFieldType.Long)
+    @JSONField(name = "ed")
     private long endTime;
     /**
      * 引擎输出WS
      */
     @HiseePSField(type = HiseePSFieldType.Text, index = HiseePSFieldIndex.no)
+    @JSONField(name = "ws")
     private String ws;
     /**
      * 消息类型  --progressive中间结果 --sentence最终结果
      */
     @HiseePSField(type = HiseePSFieldType.Text, index = HiseePSFieldIndex.no)
+    @JSONField(name = "msgtype")
     private String msgType;
     /**
      * 角色

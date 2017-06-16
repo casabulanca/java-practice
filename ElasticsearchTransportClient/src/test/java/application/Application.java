@@ -1,24 +1,14 @@
 package application;
 
-import com.alibaba.fastjson.JSON;
-import domain.JSONContent;
 import domain.TestDocument;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import ruiliu2.practice.elasticsearch.core.DefaultElasticsearchRepo;
-import ruiliu2.practice.elasticsearch.core.query.Pagination;
-import ruiliu2.practice.elasticsearch.demo.entities.Lattice;
-import ruiliu2.practice.elasticsearch.demo.entities.TransEntity;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -45,7 +35,7 @@ public class Application {
     }
 
     public static void main(String... args) throws ExecutionException, InterruptedException {
-        DefaultElasticsearchRepo<TestDocument> repo = new DefaultElasticsearchRepo<>(client, TestDocument.class);
+        DefaultElasticsearchRepo<TestDocument> repo = new DefaultElasticsearchRepo<TestDocument>(client, TestDocument.class);
         System.out.println(String.format("Main Thread number: %s", Thread.currentThread().getId()));
 //        TestDocument testDocument = new TestDocument();
 //        List<JSONContent> contents = new ArrayList<>();

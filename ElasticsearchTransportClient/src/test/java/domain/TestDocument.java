@@ -1,5 +1,6 @@
 package domain;
 
+
 import ruiliu2.practice.elasticsearch.annotations.*;
 
 import java.util.List;

@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import ruiliu2.practice.elasticsearch.core.DefaultElasticsearchRepo;
+import ruiliu2.practice.elasticsearch.demo.entities.TestObject;
 import ruiliu2.practice.elasticsearch.demo.entities.TransEntity;
 import ruiliu2.practice.elasticsearch.demo.entities.TransText;
 
@@ -25,10 +26,10 @@ public class TransportClientConfig {
 
     @Bean
     public TransportClient transportClient() {
-        Settings settings = Settings.builder().put("cluster.name", "IntellijBladeMDF_Cluster").build();
+        Settings settings = Settings.builder().put("cluster.name", "IntellijBladeMDFCluster").build();
         InetSocketTransportAddress inetSocketTransportAddress = null;
         try {
-            inetSocketTransportAddress = new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9300);
+            inetSocketTransportAddress = new InetSocketTransportAddress(InetAddress.getByName("172.31.6.20"), 9300);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -45,6 +46,11 @@ public class TransportClientConfig {
     @Bean
     public DefaultElasticsearchRepo<TransText> transTextDefaultElasticsearchRepo(TransportClient transportClient) {
         return new DefaultElasticsearchRepo<>(transportClient, TransText.class);
+    }
+
+    @Bean
+    public DefaultElasticsearchRepo<TestObject> transTestDefaultElasticsearchRepo(TransportClient transportClient) {
+        return new DefaultElasticsearchRepo<>(transportClient, TestObject.class);
     }
 
     /**

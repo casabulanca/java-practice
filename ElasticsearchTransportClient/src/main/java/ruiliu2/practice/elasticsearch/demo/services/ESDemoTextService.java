@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ruiliu2.practice.elasticsearch.core.DefaultElasticsearchRepo;
 import ruiliu2.practice.elasticsearch.core.query.SearchBody;
-import ruiliu2.practice.elasticsearch.demo.entities.TransEntity;
 import ruiliu2.practice.elasticsearch.demo.entities.TransText;
 
 import java.util.List;
